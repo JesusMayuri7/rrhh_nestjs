@@ -1,7 +1,7 @@
 import {Controller,Post,UseInterceptors,UploadedFile,UploadedFiles} from '@nestjs/common';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 
-  @Controller('import-airhsp')
+@Controller('import-airhsp')
   export class ImportAirhspController {
 
     @Post('upload')
@@ -9,10 +9,10 @@ import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
     uploadSingle(@UploadedFile() file) {
       console.log(file);
     }
-    
+
     @Post('uploads')
-    @UseInterceptors(FilesInterceptor('files[]', 10, { dest: './uploads' }))
+    @UseInterceptors(FilesInterceptor('files[]', 10, { dest: './uploads', }))
     uploadMultiple(@UploadedFiles() files) {
       console.log(files);
     }
-  }
+}
