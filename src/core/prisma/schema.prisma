@@ -1,0 +1,56 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id       String @id
+  nombre   String
+  apellido String
+}
+
+model CodigoAir {
+  id                Int                @id
+  modalidadId       Int
+  anio              String
+  codigo            String
+  descCodigo        String
+  descAbreviatura   String
+  modalidadEntrega  String
+  frecuenciaEntrega String
+  frecuenciaMes     String
+  tipo              String
+  afecto            Boolean            @default(false)
+  isActivo          Boolean            @default(false)
+  codigoAirDetalles CodigoAirDetalle[]
+}
+
+model CodigoAirDetalle {
+  id          Int       @id
+  codigoAirId Int
+  valorCodigo Float
+  codigoPlaza String
+  codigoAirs  CodigoAir @relation(fields: [codigoAirId], references: [id])
+}
+
+model DatoLaboralAir {
+  id             Int    @id
+  modalidadId    Int
+  descDatoLabora String
+  datoLaboralAirDetalle DatoLaboralAirDetalle[]
+}
+
+model DatoLaboralAirDetalle {
+  id               Int    @id
+  datoLaboralAirId Int
+  valor            String
+  codigoPlaza      String
+  datoLaboralAir      DatoLaboralAir @relation(fields: [datoLaboralAirId],references: [id])
+}
