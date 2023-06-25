@@ -10,47 +10,81 @@ generator client {
   provider = "prisma-client-js"
 }
 
-model User {
-  id       String @id
-  nombre   String
-  apellido String
+model CodigoAir {
+  id          Int    @id @default(autoincrement())
+  modalidadId Int
+  anio        String
+  codigo      String
+  descCodigo  String
+  codigoAirExtId CodigoAirExt?
+  codigoAirDetalles      CodigoAirDetalle[]
+
+
 }
 
-model CodigoAir {
-  id                Int                @id
-  modalidadId       Int
-  anio              String
-  codigo            String
-  descCodigo        String
-  descAbreviatura   String
-  modalidadEntrega  String
-  frecuenciaEntrega String
-  frecuenciaMes     String
-  tipo              String
-  afecto            Boolean            @default(false)
-  isActivo          Boolean            @default(false)
-  codigoAirDetalles CodigoAirDetalle[]
+model CodigoAirExt {
+  id                    Int                @id @default(autoincrement())
+  baseCalculoCts        Boolean            @default(false)
+  baseCalculoBeneficios Boolean            @default(false)
+  afecto                Boolean            @default(false)
+  isActivo              Boolean            @default(false)
+  codigoAirId           Int                @unique
+  modalidadEntregaId    Int
+  frecuenciaEntregaId   Int
+  frecuenciaMesId       Int
+  modalidaEntrega       ModalidadEntrega   @relation(fields: [modalidadEntregaId], references: [id])
+  frecuenciaMes         FrecuenciaMes      @relation(fields: [frecuenciaMesId], references: [id])
+  frecuenciaEntrega     FrecuenciaEntrega  @relation(fields: [frecuenciaEntregaId], references: [id])
+  codigoAir             CodigoAir          @relation(fields: [codigoAirId], references: [id])
+
+
+
 }
 
 model CodigoAirDetalle {
-  id          Int       @id
+  id             Int          @id @default(autoincrement())
   codigoAirId Int
-  valorCodigo Float
-  codigoPlaza String
-  codigoAirs  CodigoAir @relation(fields: [codigoAirId], references: [id])
+  valorCodigo    Float
+  codigoPlaza    String
+  descFuente     String
+  codigoAir     CodigoAir @relation(fields: [codigoAirId], references: [id])
+
+   
 }
 
 model DatoLaboralAir {
-  id             Int    @id
-  modalidadId    Int
-  descDatoLabora String
-  datoLaboralAirDetalle DatoLaboralAirDetalle[]
+  id                    Int                     @id @default(autoincrement())
+  modalidadId           Int
+  descDatoLaboral       String
+  datoLaboralAirDetalles DatoLaboralAirDetalle[]
 }
 
 model DatoLaboralAirDetalle {
-  id               Int    @id
+  id               Int            @id @default(autoincrement())
   datoLaboralAirId Int
   valor            String
   codigoPlaza      String
-  datoLaboralAir      DatoLaboralAir @relation(fields: [datoLaboralAirId],references: [id])
+  datoLaboralAir   DatoLaboralAir @relation(fields: [datoLaboralAirId], references: [id])
+}
+
+model ModalidadEntrega {
+  id                   Int            @id @default(autoincrement())
+  descModalidadEntrega String
+  codigoAirExts         CodigoAirExt[]
+}
+
+model FrecuenciaEntrega {
+  id                    Int            @id @default(autoincrement())
+  descFrecuenciaEntrega String
+  codigoAirExts         CodigoAirExt[]
+
+
+}
+
+model FrecuenciaMes {
+  id                Int            @id @default(autoincrement())
+  descFrecuenciaMes String
+  codigoAirExts      CodigoAirExt[]
+
+
 }
