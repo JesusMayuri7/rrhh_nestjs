@@ -54,6 +54,13 @@ export class ImportService {
         return datosLaborales;
     }
 
+    async createDatoLaboralExt(datoLaboralExt) {
+        await this.prismaService.datoLaboralAirExt.deleteMany();
+       return await this.prismaService.datoLaboralAirExt.createMany({
+           data:datoLaboralExt
+       });
+    }
+
     async createDatoLaborales(datosLaborales){
         let result;
         let countCreated=0;
@@ -88,5 +95,9 @@ export class ImportService {
         return await this.prismaService.datoLaboralAirDetalle.createMany({
           data:datoLaboralDetalle
         }); 
+    }
+
+    async getAirhsp() {
+        return await this.prismaService.datoLaboralAirExt.findMany();
     }
 }

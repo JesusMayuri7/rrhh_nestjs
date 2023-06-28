@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 
 async function main(){
 
-      const tableNames = ['DatoLaboralAirDetalle','DatoLaboralAir','CodigoAirDetalle','CodigoAirExt','CodigoAir',
+      const tableNames = ['datoLaboralAirDetalle','DatoLaboralAir','CodigoAirDetalle','CodigoAirExt','CodigoAir',
     'FrecuenciaEntrega', 'FrecuenciaMes','ModalidadEntrega'];
     for (const tableName of tableNames) 
     {

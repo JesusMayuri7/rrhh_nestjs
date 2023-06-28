@@ -18,8 +18,7 @@ model CodigoAir {
   descCodigo  String
   codigoAirExtId CodigoAirExt?
   codigoAirDetalles      CodigoAirDetalle[]
-
-
+   @@map("codigo_air")
 }
 
 model CodigoAirExt {
@@ -37,7 +36,7 @@ model CodigoAirExt {
   frecuenciaEntrega     FrecuenciaEntrega  @relation(fields: [frecuenciaEntregaId], references: [id])
   codigoAir             CodigoAir          @relation(fields: [codigoAirId], references: [id])
 
-
+   @@map("codigo_air_ext")
 
 }
 
@@ -49,7 +48,7 @@ model CodigoAirDetalle {
   descFuente     String
   codigoAir     CodigoAir @relation(fields: [codigoAirId], references: [id])
 
-   
+  @@map("codigo_air_detalle")
 }
 
 model DatoLaboralAir {
@@ -57,6 +56,14 @@ model DatoLaboralAir {
   modalidadId           Int
   descDatoLaboral       String
   datoLaboralAirDetalles DatoLaboralAirDetalle[]
+
+     @@map("dato_laboral_air")
+}
+
+model Ejemplo {
+  id                    Int                     @id @default(autoincrement())
+  ejem           Json?
+  @@map("ejemplo")
 }
 
 model DatoLaboralAirDetalle {
@@ -65,12 +72,24 @@ model DatoLaboralAirDetalle {
   valor            String
   codigoPlaza      String
   datoLaboralAir   DatoLaboralAir @relation(fields: [datoLaboralAirId], references: [id])
+  @@map("dato_laboral_air_detalle")
+}
+
+model DatoLaboralAirExt {
+  id               Int            @id @default(autoincrement())
+  modalidadId      Int  
+  codigoPlaza      String
+  datoLaboral      Json?
+  codigosAir      Json?
+  @@map("dato_laboral_air_ext")
 }
 
 model ModalidadEntrega {
   id                   Int            @id @default(autoincrement())
   descModalidadEntrega String
   codigoAirExts         CodigoAirExt[]
+
+  @@map("modalidad_entrega")
 }
 
 model FrecuenciaEntrega {
@@ -78,7 +97,7 @@ model FrecuenciaEntrega {
   descFrecuenciaEntrega String
   codigoAirExts         CodigoAirExt[]
 
-
+@@map("frecuencia_entrega")
 }
 
 model FrecuenciaMes {
@@ -86,5 +105,6 @@ model FrecuenciaMes {
   descFrecuenciaMes String
   codigoAirExts      CodigoAirExt[]
 
+@@map("frecuencia_mes")
 
 }
