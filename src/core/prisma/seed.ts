@@ -6,45 +6,45 @@ const prisma = new PrismaClient();
 
 async function main(){
 
-      const tableNames = ['datoLaboralAirDetalle','DatoLaboralAir','CodigoAirDetalle','CodigoAirExt','CodigoAir',
+/*       const tableNames = ['datoLaboralAirDetalle','DatoLaboralAir','CodigoAirDetalle','CodigoAirExt','CodigoAir',
     'FrecuenciaEntrega', 'FrecuenciaMes','ModalidadEntrega'];
     for (const tableName of tableNames) 
     {
       await prisma.$queryRawUnsafe(`Truncate "${tableName}" restart identity cascade;`);
-    } 
+    }  */
 
     const result = await prisma.modalidadEntrega.createMany({
       data: [
-        { descModalidadEntrega: "MENSUAL"},
-        { descModalidadEntrega: "PERIODICO"},
-        { descModalidadEntrega: "SEMESTRAL"},          
-        { descModalidadEntrega: "UNICA"},          
-        { descModalidadEntrega: "CORRESPONDA"},          
-        { descModalidadEntrega: "CESE"}
+        { descModalidadEntrega: "MENSUAL",modalidadId:1},
+        { descModalidadEntrega: "PERIODICO",modalidadId:1},
+        { descModalidadEntrega: "SEMESTRAL",modalidadId:1},          
+        { descModalidadEntrega: "UNICA",modalidadId:1},          
+        { descModalidadEntrega: "CORRESPONDA",modalidadId:1},          
+        { descModalidadEntrega: "CESE",modalidadId:1}
       ] });  
 
      await prisma.frecuenciaMes.createMany({
         data: [
-          {descFrecuenciaMes: "NINGUNO"},
-          {descFrecuenciaMes: "ENERO"},
-          {descFrecuenciaMes: "FEBRERO"},
-          {descFrecuenciaMes: "MARZO"},
-          {descFrecuenciaMes: "ABRIL"},
-          {descFrecuenciaMes: "MAYO"},
-          {descFrecuenciaMes: "JUNIO"},
-          {descFrecuenciaMes: "JULIO"},
-          {descFrecuenciaMes: "AGOSTO"},
-          {descFrecuenciaMes: "SETIEMBRE"},
-          {descFrecuenciaMes: "OCTUBRE"},
-          {descFrecuenciaMes: "NOVIEMBRE"},
-          {descFrecuenciaMes: "DICIEMBRE"},            
+          {descFrecuenciaMes: "NINGUNO",modalidadContratoId:1},
+          {descFrecuenciaMes: "ENERO",modalidadContratoId:1},
+          {descFrecuenciaMes: "FEBRERO",modalidadContratoId:1},
+          {descFrecuenciaMes: "MARZO",modalidadContratoId:1},
+          {descFrecuenciaMes: "ABRIL",modalidadContratoId:1},
+          {descFrecuenciaMes: "MAYO",modalidadContratoId:1},
+          {descFrecuenciaMes: "JUNIO",modalidadContratoId:1},
+          {descFrecuenciaMes: "JULIO",modalidadContratoId:1},
+          {descFrecuenciaMes: "AGOSTO",modalidadContratoId:1},
+          {descFrecuenciaMes: "SETIEMBRE",modalidadContratoId:1},
+          {descFrecuenciaMes: "OCTUBRE",modalidadContratoId:1},
+          {descFrecuenciaMes: "NOVIEMBRE",modalidadContratoId:1},
+          {descFrecuenciaMes: "DICIEMBRE",modalidadContratoId:1},            
        ],skipDuplicates: true }); 
 
        await prisma.frecuenciaEntrega.createMany({
         data: [
-          {descFrecuenciaEntrega: "PERMANENTE"},
-          {descFrecuenciaEntrega: "PERIODICO"},
-          {descFrecuenciaEntrega: "OCASIONAL"},          
+          {descFrecuenciaEntrega: "PERMANENTE",modalidadContratoId:1},
+          {descFrecuenciaEntrega: "PERIODICO",modalidadContratoId:1},
+          {descFrecuenciaEntrega: "OCASIONAL",modalidadContratoId:1},          
        ],skipDuplicates: true });
 }
 

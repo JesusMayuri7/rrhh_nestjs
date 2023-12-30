@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
+import { AirhspData } from '@prisma/client';
 import { PrismaService } from 'src/core/prisma/prisma.service';
-import * as Excel from 'exceljs';
 import { map } from 'rxjs/operators';
 
 @Injectable()
@@ -8,20 +8,8 @@ export class ImportService {
 
     constructor(private readonly prismaService: PrismaService) {}
 
-    async getCodigosAir() {
-        var codigosAir = await this.prismaService.codigoAir.count.length;
-        return codigosAir;
-    }
-
-    async createdCodigosAirExt() {
-        // TODO
-
-    }
-
-
-
     async createCodigosAir(codigoAir) {
-        await this.prismaService.codigoAirDetalle.deleteMany();
+/*         await this.prismaService.codigoAirDetalle.deleteMany();
         await this.prismaService.codigoAirExt.deleteMany();
         await this.prismaService.codigoAir.deleteMany();
 
@@ -46,23 +34,52 @@ export class ImportService {
                 }
             });
 
-        });
+        }); */
     }
 
-    async getDatosLaborales() {
-        var datosLaborales = await this.prismaService.datoLaboralAir.findMany();
-        return datosLaborales;
-    }
-
-    async createDatoLaboralExt(datoLaboralExt) {
-        await this.prismaService.datoLaboralAirExt.deleteMany();
-       return await this.prismaService.datoLaboralAirExt.createMany({
+    async createDatoLaboral(datoLaboralExt:[]):Promise<any> {
+        return await this.prismaService.airhspData.createMany({
            data:datoLaboralExt
        });
     }
 
+    async createAirhspFile(airhspFile):Promise<any> {
+
+    return await this.prismaService.airhspFile.create({
+           data:{
+            fileUrl: airhspFile['fileUrl'],
+            modalidadContratoId: airhspFile['modalidadContratoId'],
+            airhspData: {
+                createMany :{
+                    data:airhspFile['airhspData']
+                }
+            }      
+            
+  /*               {
+                create: airhspFile['airhspData'].map((airhspData)=>{
+                    return {
+                        codigoPlaza: airhspData.codigoPlaza,
+                        modalidadContratoId: 1,
+                        datoLaboral: airhspData['datoLaboral'],
+                        codigosAir: airhspData['codigosAir'].map((detalle) => {
+                            return  {
+                                valor : detalle.valorCodigo,
+                                codigoPlaza :  detalle.codigoPlaza,
+                                descFuente :  detalle.descFuente,
+                                descCodigo :  detalle.descCodigo,
+                            }
+                        }),
+                    }
+                    })                 
+                }, */
+            }
+        });
+
+  
+    }
+
     async createDatoLaborales(datosLaborales){
-        let result;
+/*         let result;
         let countCreated=0;
         await this.prismaService.datoLaboralAirDetalle.deleteMany();
         await this.prismaService.datoLaboralAir.deleteMany();
@@ -70,7 +87,8 @@ export class ImportService {
             result = await this.prismaService.datoLaboralAir.create({
                data: {
                 descDatoLaboral:dato.descDatoLaboral,
-                modalidadId:dato.modalidadId,datoLaboralAirDetalles : {
+                modalidadId:dato.modalidadId,
+                datoLaboralAirDetalles : {
                     createMany: {
                         data: dato.datoLaboralAirDetalles.map((detalle) => {
                             return  {
@@ -88,16 +106,8 @@ export class ImportService {
                 console.log(countCreated);
             }
             return index;
-        });
-    }
+        });*/
+    } 
 
-    async createDatoLaboralDetalle(datoLaboralDetalle) {
-        return await this.prismaService.datoLaboralAirDetalle.createMany({
-          data:datoLaboralDetalle
-        }); 
-    }
 
-    async getAirhsp() {
-        return await this.prismaService.datoLaboralAirExt.findMany();
-    }
 }

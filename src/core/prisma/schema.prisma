@@ -10,101 +10,102 @@ generator client {
   provider = "prisma-client-js"
 }
 
-model CodigoAir {
+model AirhspCodigo {
   id          Int    @id @default(autoincrement())
-  modalidadId Int
+  modalidadContratoId Int
+  modalidaContrato      ModalidadContrato   @relation(fields: [modalidadContratoId], references: [id])
   anio        String
   codigo      String
   descCodigo  String
-  codigoAirExtId CodigoAirExt?
-  codigoAirDetalles      CodigoAirDetalle[]
-   @@map("codigo_air")
+  configAirhspCodigo ConfigAirhspCodigo?
+   @@map("airhsp_codigo")
 }
 
-model CodigoAirExt {
+model AirhspFile {
+  id         Int    @id @default(autoincrement())  
+  fileUrl     String
+  modalidadContratoId Int
+  modalidaContrato      ModalidadContrato   @relation(fields: [modalidadContratoId], references: [id])
+  airhspData  AirhspData[]
+  createdAt     DateTime  @default(now())
+  @@map("airhsp_file")
+}
+
+model ConfigAirhspCodigo {
   id                    Int                @id @default(autoincrement())
   baseCalculoCts        Boolean            @default(false)
   baseCalculoBeneficios Boolean            @default(false)
   afecto                Boolean            @default(false)
   isActivo              Boolean            @default(false)
-  codigoAirId           Int                @unique
-  modalidadEntregaId    Int
+  airhspCodigoId        Int                @unique
+  modalidadEntregaId    Int 
+  modalidadContratoId    Int 
   frecuenciaEntregaId   Int
   frecuenciaMesId       Int
   modalidaEntrega       ModalidadEntrega   @relation(fields: [modalidadEntregaId], references: [id])
+  modalidaContrato      ModalidadContrato   @relation(fields: [modalidadContratoId], references: [id])
   frecuenciaMes         FrecuenciaMes      @relation(fields: [frecuenciaMesId], references: [id])
   frecuenciaEntrega     FrecuenciaEntrega  @relation(fields: [frecuenciaEntregaId], references: [id])
-  codigoAir             CodigoAir          @relation(fields: [codigoAirId], references: [id])
+  airhspCodigo          AirhspCodigo       @relation(fields: [airhspCodigoId],references: [id])
 
-   @@map("codigo_air_ext")
+   @@map("config_airhsp_codigo")
 
 }
 
-model CodigoAirDetalle {
-  id             Int          @id @default(autoincrement())
-  codigoAirId Int
-  valorCodigo    Float
-  codigoPlaza    String
-  descFuente     String
-  codigoAir     CodigoAir @relation(fields: [codigoAirId], references: [id])
-
-  @@map("codigo_air_detalle")
-}
-
-model DatoLaboralAir {
+model ConfigAirhspData {
   id                    Int                     @id @default(autoincrement())
-  modalidadId           Int
+  modalidadContratoId           Int
+  modalidaContrato      ModalidadContrato   @relation(fields: [modalidadContratoId], references: [id])
   descDatoLaboral       String
-  datoLaboralAirDetalles DatoLaboralAirDetalle[]
 
-     @@map("dato_laboral_air")
+  @@map("config_airhsp_data")
 }
 
-model Ejemplo {
-  id                    Int                     @id @default(autoincrement())
-  ejem           Json?
-  @@map("ejemplo")
-}
-
-model DatoLaboralAirDetalle {
+model AirhspData {
   id               Int            @id @default(autoincrement())
-  datoLaboralAirId Int
-  valor            String
+  modalidadContratoId      Int 
+  airhspFileId  Int
+  modalidaContrato      ModalidadContrato   @relation(fields: [modalidadContratoId], references: [id]) 
+  airhspFile      AirhspFile   @relation(fields: [airhspFileId], references: [id]) 
   codigoPlaza      String
-  datoLaboralAir   DatoLaboralAir @relation(fields: [datoLaboralAirId], references: [id])
-  @@map("dato_laboral_air_detalle")
-}
-
-model DatoLaboralAirExt {
-  id               Int            @id @default(autoincrement())
-  modalidadId      Int  
-  codigoPlaza      String
-  datoLaboral      Json?
-  codigosAir      Json?
-  @@map("dato_laboral_air_ext")
+  datoLaboral      Json
+  codigosAir       Json
+  @@map("airhsp_data")
 }
 
 model ModalidadEntrega {
   id                   Int            @id @default(autoincrement())
+  modalidadId      Int  
   descModalidadEntrega String
-  codigoAirExts         CodigoAirExt[]
-
+  configAirhspCodigo ConfigAirhspCodigo[]
   @@map("modalidad_entrega")
+}
+
+model ModalidadContrato {
+  id                   Int            @id @default(autoincrement())
+  descModalidadContrato String
+  descTipoPersona       String
+  descTipoPersonaId     Int
+  configAirhspCodigo ConfigAirhspCodigo[]
+  configAirhspData ConfigAirhspData[]
+  airhspCodigo AirhspCodigo[]
+  airhspData AirhspData[]
+  airhspFIle AirhspFile[]
+  @@map("modalidad_contrato")
 }
 
 model FrecuenciaEntrega {
   id                    Int            @id @default(autoincrement())
+  modalidadContratoId      Int 
   descFrecuenciaEntrega String
-  codigoAirExts         CodigoAirExt[]
-
-@@map("frecuencia_entrega")
+  configAirhspCodigo ConfigAirhspCodigo[]
+  @@map("frecuencia_entrega")
 }
 
 model FrecuenciaMes {
   id                Int            @id @default(autoincrement())
+  modalidadContratoId      Int  
   descFrecuenciaMes String
-  codigoAirExts      CodigoAirExt[]
-
-@@map("frecuencia_mes")
-
+  configAirhspCodigo ConfigAirhspCodigo[]
+  @@map("frecuencia_mes")
 }
